@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Set Custom New Tab</title>
+</head>
+<body>
+  <h1>Set Custom New Tab</h1>
+  <input type="url" id="customUrl" placeholder="Enter your custom URL" />
+  <button id="saveButton">Save</button>
+  <p id="status"></p>
+
+  <script>
+    const input = document.getElementById("customUrl");
+    const saveButton = document.getElementById("saveButton");
+    const status = document.getElementById("status");
+
+    // Load the saved URL when the popup opens
+    chrome.storage.local.get(["customNewTabUrl"], (result) => {
+      if (result.customNewTabUrl) {
+        input.value = result.customNewTabUrl;
+      }
+    });
+
+    // Save the new URL
+    saveButton.addEventListener("click", () => {
+      const url = input.value;
+      if (url) {
+        chrome.storage.local.set({ customNewTabUrl: url }, () => {
+          status.textContent = "Custom URL saved!";
+          setTimeout(() => (status.textContent = ""), 2000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
